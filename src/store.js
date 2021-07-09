@@ -71,9 +71,18 @@ export const store = createStore({
             await dispatch('getTodos');
         },
 
-        async addTodo({ dispatch }, netTodo) {
+        async addTodo({ dispatch }, newTodo) {
             // TODO: check response
-            await todosApi.post('', netTodo);
+            await todosApi.post('', newTodo);
+            await dispatch('getTodos');
+        },
+
+        async toggleTodo({ dispatch, state }, todo) {
+            // TODO: check response
+
+            todo.done = !todo.done;
+
+            await todosApi.put(`${todo.id}`, todo);
             await dispatch('getTodos');
         }
     },

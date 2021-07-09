@@ -19,10 +19,18 @@
     >
       <div class="d-flex justify-content-between align-items-center">
         <span>
-          {{ todo.content }}
+          <input
+            class="form-check-input"
+            type="checkbox"
+            v-model="todo.done"
+            :id="todo.id"
+            @click="toggleTodo(todo)"
+          />
+          <label class="form-check-label px-2" :for="todo.id">
+            {{ todo.content }}
+          </label>
         </span>
         <div class="btn-group" role="group">
-          <button class="btn btn-primary">Edit</button>
           <button class="btn btn-danger" @click="deleteTodo(todo.id)">
             Delete
           </button>
@@ -55,6 +63,10 @@ const deleteTodo = async (id) => {
 const addTodo = async (id) => {
   await store.dispatch("addTodo", newTodo);
   newTodo.content = "";
+};
+
+const toggleTodo = async (todo) => {
+  await store.dispatch("toggleTodo", todo);
 };
 
 const logout = async () => {
