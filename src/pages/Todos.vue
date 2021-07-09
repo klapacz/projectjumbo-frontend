@@ -1,4 +1,18 @@
 <template>
+  <form class="row py-2 align-items-center" @submit.prevent="addTodo">
+    <div class="col-auto">
+      <label for="todo-content" class="visually-hidden">Password</label>
+      <input
+        id="todo-content"
+        v-model="newTodo.content"
+        class="form-control"
+      />
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-success">Add</button>
+    </div>
+  </form>
+
   <ul v-if="store.state.todos" class="list-group list-group-flush">
     <div
       v-for="todo in store.state.todos"
@@ -21,7 +35,13 @@
 </template>
 
 <script setup>
+import { reactive } from "vue";
 import { useStore } from "vuex";
+
+const newTodo = reactive({
+  content: "",
+  done: false,
+});
 
 const store = useStore();
 
@@ -31,6 +51,11 @@ const getTodos = async () => {
 
 const deleteTodo = async (id) => {
   await store.dispatch("deleteTodo", id);
+};
+
+const addTodo = async (id) => {
+  await store.dispatch("addTodo", newTodo);
+  newTodo.content = "";
 };
 
 if (!store.state.todos) getTodos();
