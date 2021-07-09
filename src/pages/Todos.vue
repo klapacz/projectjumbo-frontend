@@ -13,7 +13,7 @@
     </div>
   </form>
 
-  <ul v-if="store.state.todos" class="list-group list-group-flush">
+  <ul v-if="store.state.todos.length" class="list-group list-group-flush">
     <div
       v-for="todo in store.state.todos"
       :key="todo.id"
@@ -32,6 +32,9 @@
       </div>
     </div>
   </ul>
+  <div v-else class="alert alert-warning">
+    You don't have any tasks
+  </div>
 </template>
 
 <script setup>
