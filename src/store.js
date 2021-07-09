@@ -16,7 +16,16 @@ export const store = createStore({
 
             window.localStorage.setItem('token', token);
         },
+
+        removeToken(state) {
+            state.token = null;
+            window.localStorage.removeItem('token');
+        }
     },
+
+	getters: {
+		isLoggedIn: (state) => !!state.token,
+	},
 
     actions: {
         async login({ commit }, form) {
@@ -31,6 +40,10 @@ export const store = createStore({
 
                 return 'Login error';
             }
-        }
+        },
+
+        async logout({ commit, state }) {
+			commit('removeToken');
+		},
     },
 });

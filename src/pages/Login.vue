@@ -1,5 +1,8 @@
 <template>
-  <form @submit.prevent="login">
+  <div v-if="store.getters.isLoggedIn">
+    <button @click="logout" class="btn btn-dark">Logout</button>
+  </div>
+  <form v-else @submit.prevent="login">
     <div v-if="error" class="alert alert-danger" role="alert">
       {{ error }}
     </div>
@@ -44,4 +47,8 @@ const login = async () => {
 
   error.value = await store.dispatch('login', form);
 };
+
+const logout = async () => {
+  await store.dispatch('logout');
+}
 </script>
