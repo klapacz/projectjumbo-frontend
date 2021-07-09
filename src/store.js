@@ -5,9 +5,14 @@ const { VITE_API_URL: API_URL } = import.meta.env;
 
 console.log(API_URL)
 
+const todosApi = axios.create({
+	baseURL: `${API_URL}/todo`,
+});
+
 export const store = createStore({
     state: () => ({
         token: window.localStorage.getItem('token'),
+        todos: null,
     }),
 
     mutations: {
@@ -20,12 +25,16 @@ export const store = createStore({
         removeToken(state) {
             state.token = null;
             window.localStorage.removeItem('token');
+        },
+
+        setTodos(state, todos) {
+            state.todos = todos;
         }
     },
 
-	getters: {
-		isLoggedIn: (state) => !!state.token,
-	},
+    getters: {
+        isLoggedIn: (state) => !!state.token,
+    },
 
     actions: {
         async login({ commit }, form) {
@@ -43,7 +52,31 @@ export const store = createStore({
         },
 
         async logout({ commit, state }) {
-			commit('removeToken');
-		},
+            commit('removeToken');
+        },
+
+        async getTodos({ commit }) {
+            const response = await todosApi.get();
+
+            commit('setTodos', response.data);
+        }
     },
+});
+
+const getAuthHeader = () => `Bearer ${store.state.token}`;
+
+todosApi.interceptors.request.use((config) => {
+	if(store.getters.isLoggedIn) {
+		config.headers.Authorization = getAuthHeader();
+	}
+
+	return config;
+});
+
+todosApi.interceptors.response.use(undefined, async (error) => {
+	if(error.response?.status !== 401) {
+		return Promise.reject(error);
+	}
+
+    await store.dispatch('logout');
 });
