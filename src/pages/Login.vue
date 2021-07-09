@@ -1,7 +1,5 @@
 <template>
-  <div v-if="store.getters.isLoggedIn">
-  </div>
-  <form v-else @submit.prevent="login">
+  <form @submit.prevent="login">
     <div v-if="error" class="alert alert-danger" role="alert">
       {{ error }}
     </div>
