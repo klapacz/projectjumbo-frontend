@@ -25,6 +25,9 @@
 
 <script setup>
 import { reactive, ref } from "vue";
+import { useStore } from "vuex";
+
+const store = useStore();
 
 const form = reactive({
   name: "",
@@ -33,12 +36,12 @@ const form = reactive({
 
 const error = ref("");
 
-const login = () => {
+const login = async () => {
   if (!form.name.length || !form.password.length) {
     error.value = "Password and login cannot be empty";
     return;
   }
 
-  error.value = "";
+  error.value = await store.dispatch('login', form);
 };
 </script>
