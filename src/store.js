@@ -59,6 +59,12 @@ export const store = createStore({
             const response = await todosApi.get();
 
             commit('setTodos', response.data);
+        },
+
+        async deleteTodo({ dispatch }, id) {
+            // TODO: check response
+            await todosApi.delete(`${id}`)
+            await dispatch('getTodos');
         }
     },
 });

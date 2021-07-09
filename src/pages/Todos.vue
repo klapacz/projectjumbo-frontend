@@ -11,7 +11,9 @@
         </span>
         <div class="btn-group" role="group">
           <button class="btn btn-primary">Edit</button>
-          <button class="btn btn-danger">Delete</button>
+          <button class="btn btn-danger" @click="deleteTodo(todo.id)">
+            Delete
+          </button>
         </div>
       </div>
     </div>
@@ -20,12 +22,15 @@
 
 <script setup>
 import { useStore } from "vuex";
-import { RouterLink } from "vue-router";
 
 const store = useStore();
 
 const getTodos = async () => {
   store.dispatch("getTodos");
+};
+
+const deleteTodo = async (id) => {
+  await store.dispatch("deleteTodo", id);
 };
 
 if (!store.state.todos) getTodos();
