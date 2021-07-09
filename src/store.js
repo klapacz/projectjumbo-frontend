@@ -31,6 +31,10 @@ export const store = createStore({
 
         setTodos(state, todos) {
             state.todos = todos;
+        },
+
+        removeTodos(state) {
+            state.todos = null;
         }
     },
 
@@ -56,6 +60,7 @@ export const store = createStore({
 
         async logout({ commit, state }) {
             commit('removeToken');
+            commit('removeTodos');
             router.push({ name: 'login' })
         },
 
