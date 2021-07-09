@@ -1,19 +1,17 @@
 <template>
+  <button @click="logout" class="btn btn-dark">Logout</button>
+
   <form class="row py-2 align-items-center" @submit.prevent="addTodo">
     <div class="col-auto">
       <label for="todo-content" class="visually-hidden">Password</label>
-      <input
-        id="todo-content"
-        v-model="newTodo.content"
-        class="form-control"
-      />
+      <input id="todo-content" v-model="newTodo.content" class="form-control" />
     </div>
     <div class="col-auto">
       <button type="submit" class="btn btn-success">Add</button>
     </div>
   </form>
 
-  <ul v-if="store.state.todos.length" class="list-group list-group-flush">
+  <ul v-if="store.state.todos && store.state.todos.length" class="list-group list-group-flush">
     <div
       v-for="todo in store.state.todos"
       :key="todo.id"
@@ -32,9 +30,7 @@
       </div>
     </div>
   </ul>
-  <div v-else class="alert alert-warning">
-    You don't have any tasks
-  </div>
+  <div v-else class="alert alert-warning">You don't have any tasks</div>
 </template>
 
 <script setup>
@@ -59,6 +55,10 @@ const deleteTodo = async (id) => {
 const addTodo = async (id) => {
   await store.dispatch("addTodo", newTodo);
   newTodo.content = "";
+};
+
+const logout = async () => {
+  await store.dispatch("logout");
 };
 
 if (!store.state.todos) getTodos();

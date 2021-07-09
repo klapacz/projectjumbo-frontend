@@ -1,6 +1,5 @@
 <template>
   <div v-if="store.getters.isLoggedIn">
-    <button @click="logout" class="btn btn-dark">Logout</button>
   </div>
   <form v-else @submit.prevent="login">
     <div v-if="error" class="alert alert-danger" role="alert">
@@ -29,8 +28,10 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router"
 
 const store = useStore();
+const router = useRouter();
 
 const form = reactive({
   name: "",
@@ -48,7 +49,7 @@ const login = async () => {
   error.value = await store.dispatch('login', form);
 };
 
-const logout = async () => {
-  await store.dispatch('logout');
+if (store.getters.isLoggedIn) {
+  router.push({ name: 'todos' })
 }
 </script>

@@ -1,6 +1,8 @@
 import { createStore } from 'vuex';
 import axios from 'axios'
 
+import { router } from './router'
+
 const { VITE_API_URL: API_URL } = import.meta.env;
 
 console.log(API_URL)
@@ -42,6 +44,7 @@ export const store = createStore({
                 const response = await axios.post(`${API_URL}/login`, form);
 
                 commit('setTokens', response.data);
+                router.push({ name: 'todos' })
             } catch (error) {
                 if (error.response.status === 401 || error.response.status === 403) {
                     return 'Bad login or password';
@@ -53,6 +56,7 @@ export const store = createStore({
 
         async logout({ commit, state }) {
             commit('removeToken');
+            router.push({ name: 'login' })
         },
 
         async getTodos({ commit }) {
